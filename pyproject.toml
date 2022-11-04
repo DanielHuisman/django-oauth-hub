@@ -1,0 +1,34 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "django-oauth-hub"
+version = "0.0.1"
+description = "OAuth client and server for Django using authlib."
+authors = ["Daniel Huisman <daniel@huisman.me>"]
+maintainers = ["Daniel Huisman <daniel@huisman.me>"]
+license = "MIT"
+readme = "README.md"
+
+homepage = "https://github.com/DanielHuisman/django-oauth-hub"
+repository = "https://github.com/DanielHuisman/django-oauth-hub"
+
+keywords = ["django", "oauth", "client", "server", "authlib"]
+
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[tool.poetry.dependencies]
+django = "^4.0"
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]

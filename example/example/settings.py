@@ -130,7 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Django OAuth Hub
 
 DJANGO_OAUTH_HUB = {
-    'use_uuid': True,
+    'use_uuid': False,
     'client': {
         'use_email': True,
         'use_username': True,

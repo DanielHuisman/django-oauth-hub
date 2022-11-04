@@ -20,6 +20,10 @@ The settings are separated per module:
 - [Client](#client)
 - [Server](#server)
 
+**Note:** Several settings can only be configured before the first migration.
+
+See [`example/settings.py`](../example/example/settings.py) for an example.
+
 ## Common
 These settings apply to all modules and can be configured directly under the root:
 ```python
@@ -27,6 +31,19 @@ DJANGO_OAUTH_HUB = {
     # ...
 }
 ```
+
+### Before migration
+These settings can only be changed before the first migration.
+
+| Name       | Description                                                                                                                                                                                                                                                                                                                                                | Default Value |
+|------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| `use_uuid` | Whether the models should use [`UUIDField`](https://docs.djangoproject.com/en/4.1/ref/models/fields/#uuidfield) as primary key, otherwise [`BigAutoField`](https://docs.djangoproject.com/en/4.1/ref/models/fields/#bigautofield) is used. It uses [`uuid.uuid4`](https://docs.python.org/3/library/uuid.html#uuid.uuid4) to generate random primary keys. | `False`       |
+
+### After migration
+These settings can be changed at any time.
+
+| Name | Description | Default Value |
+|------|-------------|---------------|
 
 ## Client
 These settings are for the OAuth client module and can be configured under the `client` key:

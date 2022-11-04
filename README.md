@@ -1,6 +1,6 @@
 # Django OAuth Hub
 
-OAuth client and server for Django using authlib.
+OAuth client and server for Django using [Authlib](https://github.com/lepture/authlib).
 
 **NOTE: This library is still under development and mostly undocumented. It is currently not recommended for use in (production) applications.**
 
@@ -9,10 +9,14 @@ OAuth client and server for Django using authlib.
 This library consists of two modules: an OAuth client and an OAuth server. The two modules were designed to be used together, but they can also be used separately.
 
 ### OAuth client
-TODO
+- OAuth 1.0
+- OAuth 2.0
+- Configurable by database
+- Multiple clients per OAuth provider
 
 ### OAuth server
-TODO
+- OAuth 2.0
+- TODO
 
 ## Documentation
 The documentation is available [here](docs/index.md).

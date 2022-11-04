@@ -1,31 +1,27 @@
 from abc import abstractmethod, ABC
 from datetime import datetime
-from functools import cache
-from typing import Any, TYPE_CHECKING
+from typing import Any
 from uuid import UUID
 
 from authlib.integrations.django_client import OAuth
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
-from ..settings import Settings
-from ..util import import_attribute
-
-if TYPE_CHECKING:
-    from .models import OAuthClient
-
-
-@cache
-def get_client_backend() -> 'BaseOAuthClientBackend':
-    backend_class = import_attribute(Settings.CLIENT_BACKEND, type(BaseOAuthClientBackend))
-    return backend_class()
+from .models import OAuthClient
+from .providers import providers as default_providers, OAuthProvider
 
 
 class BaseOAuthClientBackend(ABC):
 
     @abstractmethod
+    def get_providers(self) -> dict[str, OAuthProvider]:
+        raise NotImplementedError()
+
+    @abstractmethod
     def get_client(self, oauth_client_id: UUID | str) -> tuple[OAuthClient, Any]:
         raise NotImplementedError()
 
-    def validate_oauth_client(self, oauth_client: 'OAuthClient'):
+    def validate_oauth_client(self, oauth_client: OAuthClient):
         pass
 
 
@@ -33,6 +29,19 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
 
     _oauth = OAuth()
     _client_cache: dict[UUID, tuple[datetime, Any]] = {}
+
+    def get_providers(self) -> dict[str, OAuthProvider]:
+        return default_providers
+
+    def create_oauth_client(self, provider_slug: str, client_id: str = None, client_secret: str = None) -> OAuthClient:
+        provider = self.get_providers().get(provider_slug)
+        if not provider:
+            raise ValidationError(_(f'OAuth provider "%(slug)s" was not found.'), code='not_found', params={'slug': provider_slug})
+
+        oauth_client = OAuthClient(**provider, client_id=client_id, client_secret=client_secret)
+        oauth_client.save()
+
+        return oauth_client
 
     def get_client(self, oauth_client_id: UUID | str) -> tuple[OAuthClient, Any]:
         # Obtain OAuth client definition

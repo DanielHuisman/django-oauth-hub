@@ -1,4 +1,12 @@
+from functools import cache
+from typing import TYPE_CHECKING
+
 from django.conf import settings as django_settings
+
+from .util import import_attribute
+
+if TYPE_CHECKING:
+    from .oauth_client.backend import BaseOAuthClientBackend
 
 
 class Settings:
@@ -15,3 +23,9 @@ class Settings:
     CLIENT_BACKEND = _client_settings.get('backend', 'django_oauth_hub.oauth_client.backend.DefaultOAuthClientBackend')
 
     _server_settings = _settings.get('server', {})
+
+    @staticmethod
+    @cache
+    def get_client_backend() -> 'BaseOAuthClientBackend':
+        backend_class = import_attribute(Settings.CLIENT_BACKEND)
+        return backend_class()

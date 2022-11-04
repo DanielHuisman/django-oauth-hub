@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django_oauth_hub.models import BaseModel
 from django_oauth_hub.settings import Settings
 
+from ..backend import get_client_backend
+
 
 class OAuthClient(BaseModel):
 
@@ -65,6 +67,9 @@ class OAuthClient(BaseModel):
         # Ensure OpenID scope is present when using OpenID Connect
         if self.openid_url and 'openid' not in self.scope:
             self.scope = f'openid,{self.scope}' if self.scope else 'openid'
+
+        # Call backend validation hook
+        get_client_backend().validate_oauth_client(self)
 
     def save(self, **kwargs):
         self.clean()

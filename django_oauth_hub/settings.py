@@ -12,5 +12,6 @@ class Settings:
     CLIENT_ALLOW_BLANK_EMAIL = _client_settings.get('allow_blank_email', False)
     CLIENT_ALLOW_BLANK_USERNAME = _client_settings.get('allow_blank_username', False)
     CLIENT_MAX_LENGTH_USERNAME = int(_client_settings.get('max_length_username', 150))
+    CLIENT_BACKEND = _client_settings.get('backend', 'django_oauth_hub.oauth_client.backend.DefaultOAuthClientBackend')
 
     _server_settings = _settings.get('server', {})

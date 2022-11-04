@@ -11,6 +11,7 @@ This library consists of two modules: an OAuth client and an OAuth server. The t
 ### OAuth client
 - OAuth 1.0
 - OAuth 2.0
+- OpenID Connect (Discovery)
 - Configurable by database
 - Multiple clients per OAuth provider
 

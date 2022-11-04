@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('type', models.CharField(choices=[('GENERIC', 'Generic')], max_length=32, verbose_name='type')),
                 ('name', models.TextField(verbose_name='name')),
                 ('slug', models.SlugField(blank=True, max_length=255, verbose_name='slug')),
-                ('client_id', models.TextField(default='placeholder', verbose_name='client id')),
+                ('client_id', models.TextField(default='placeholder', verbose_name='client ID')),
                 ('client_secret', models.TextField(default='placeholder', verbose_name='client secret')),
                 ('request_token_url', models.URLField(blank=True, verbose_name='request token URL')),
                 ('access_token_url', models.URLField(blank=True, verbose_name='access token URL')),

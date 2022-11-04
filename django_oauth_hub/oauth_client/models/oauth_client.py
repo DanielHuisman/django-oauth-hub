@@ -24,7 +24,7 @@ class OAuthClient(BaseModel):
     type = models.CharField(_('type'), max_length=32, choices=Type.choices)
     name = models.TextField(_('name'))
     slug = models.SlugField(_('slug'), max_length=255, blank=True)
-    client_id = models.TextField(_('client id'), default='placeholder')
+    client_id = models.TextField(_('client ID'), default='placeholder')
     client_secret = models.TextField(_('client secret'), default='placeholder')
     request_token_url = models.URLField(_('request token URL'), blank=True)
     access_token_url = models.URLField(_('access token URL'), blank=True)

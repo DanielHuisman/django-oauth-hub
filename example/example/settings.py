@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_oauth_hub.client',
-    'django_oauth_hub.server',
+    'django_oauth_hub.oauth_client',
+    'django_oauth_hub.oauth_server',
     'demo',
 ]
 
@@ -125,3 +125,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Django OAuth Hub
+
+DJANGO_OAUTH_HUB = {
+    'use_uuid': True,
+    'client': {
+        'use_email': True,
+        'use_username': True,
+        'allow_blank_email': False,
+        'allow_blank_username': True
+    }
+}

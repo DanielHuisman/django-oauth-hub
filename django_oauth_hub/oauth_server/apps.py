@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ClientConfig(AppConfig):
+class ServerConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'django_oauth_hub.client'
+    name = 'django_oauth_hub.oauth_server'

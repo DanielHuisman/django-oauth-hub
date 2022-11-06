@@ -7,8 +7,9 @@ from authlib.integrations.django_client import OAuth
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
+from ..settings import Settings
 from .models import OAuthClient
-from .providers import providers as default_providers, OAuthProvider
+from .providers import providers as all_providers, OAuthProvider
 
 
 class BaseOAuthClientBackend(ABC):
@@ -31,7 +32,11 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
     _client_cache: dict[UUID, tuple[datetime, Any]] = {}
 
     def get_providers(self) -> dict[str, OAuthProvider]:
-        return default_providers
+        # Filter providers if necessary
+        if Settings.CLIENT_PROVIDERS:
+            return {slug: provider for slug, provider in all_providers.items() if slug in Settings.CLIENT_PROVIDERS}
+
+        return all_providers
 
     def create_oauth_client(self, provider_slug: str, client_id: str = None, client_secret: str = None) -> OAuthClient:
         provider = self.get_providers().get(provider_slug)

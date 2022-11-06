@@ -22,17 +22,32 @@ class OAuthProvider(TypedDict, total=False):
 
 
 providers: dict[str, OAuthProvider] = {
-    'google': {
-        'name': 'Google',
-        'slug': 'google',
-        'version': OAuthClient.Version.V2_0,
-        'type': OAuthClient.Type.GENERIC,
-        'scope': 'openid email profile',
-        'parameters': {
-            'access_type': 'offline'
+    provider['slug']: provider for provider in [
+        {
+            'name': 'Google',
+            'slug': 'google',
+            'version': OAuthClient.Version.V2_0,
+            'type': OAuthClient.Type.GENERIC,
+            'scope': 'openid email profile',
+            'parameters': {
+                'access_type': 'offline'
+            },
+            'openid_url': 'https://accounts.google.com/.well-known/openid-configuration',
+            'user_id_key': 'sub',
+            'user_email_key': 'email'
         },
-        'openid_url': 'https://accounts.google.com/.well-known/openid-configuration',
-        'user_id_key': 'sub',
-        'user_email_key': 'email'
-    }
+        {
+            'name': 'Microsoft',
+            'slug': 'microsoft',
+            'version': OAuthClient.Version.V2_0,
+            'type': OAuthClient.Type.GENERIC,
+            'scope': 'openid email profile offline_access',
+            # Available tenants: common, organizations, consumers, tenant ID
+            # https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc#find-your-apps-openid-configuration-document-uri
+            'openid_url': 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration',
+            'user_id_key': 'sub',
+            'user_email_key': 'email',
+            'user_username_key': 'preferred_username'
+        }
+    ]
 }

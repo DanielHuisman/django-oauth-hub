@@ -60,20 +60,19 @@ These settings can only be changed before the first migration.
 
 | Name                   | Description                                                                                                                                                           | Type        | Default Value                                                            |
 |------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|--------------------------------------------------------------------------|
-| `backend`              | Backend used for OAuth clients. Override this to customize the default behaviour. See [client backend](client/backend.md) for more information.                       | `str`       | `django_oauth_hub.oauth_client.`<br/>`backend.DefaultOAuthClientBackend` |
 | `use_email`            | Whether an email address field should be used for OAuth users                                                                                                         | `bool`      | `True`                                                                   |
 | `use_username`         | Whether a username field should be used for OAuth users.                                                                                                              | `bool`      | `False`                                                                  |
  | `allow_blank_email`    | Whether the email address field can be blank.                                                                                                                         | `bool`      | `False`                                                                  |
 | `allow_blank_username` | Whether the username field can be blank.                                                                                                                              | `bool`      | `False`                                                                  |
 | `max_length_username`  | Maximum length of the username field.                                                                                                                                 | `int`       | `150`                                                                    |
-| `providers`            | List of enabled providers. If none are specified, all providers are enabled. See [providers.py](../django_oauth_hub/oauth_client/providers.py) for a list of options. | `list[str]` | `None`                                                                   |
 
 ### After migration
 These settings can be changed at any time.
 
-| Name | Description | Type | Default Value |
-|------|-------------|------|---------------|
-
+| Name        | Description                                                                                                                                                           | Type        | Default Value                                                            |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|--------------------------------------------------------------------------|
+| `backend`   | Backend used for OAuth clients. Override this to customize the default behaviour. See [client backend](client/backend.md) for more information.                       | `str`       | `django_oauth_hub.oauth_client.`<br/>`backend.DefaultOAuthClientBackend` |
+| `providers` | List of enabled providers. If none are specified, all providers are enabled. See [providers.py](../django_oauth_hub/oauth_client/providers.py) for a list of options. | `list[str]` | `None`                                                                   |
 
 ## Server
 These settings are for the OAuth server module and can be configured under the `server` key:

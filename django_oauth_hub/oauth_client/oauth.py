@@ -9,10 +9,10 @@ from django.utils import timezone
 from .models import OAuthClient, OAuthClientToken
 
 oauth = OAuth()
-client_cache: dict[UUID, tuple[datetime, Any]] = {}
+client_cache: dict[int | UUID, tuple[datetime, Any]] = {}
 
 
-def get_oauth_client_by_id(oauth_client_id: UUID) -> tuple[OAuthClient, Any]:
+def get_oauth_client_by_id(oauth_client_id: int | UUID) -> tuple[OAuthClient, Any]:
     return get_oauth_client(oauth_client_id=oauth_client_id)
 
 
@@ -20,7 +20,7 @@ def get_oauth_client_by_slug(oauth_client_slug: str) -> tuple[OAuthClient, Any]:
     return get_oauth_client(oauth_client_slug=oauth_client_slug)
 
 
-def get_oauth_client(oauth_client_id: UUID = None, oauth_client_slug: str = None) -> tuple[OAuthClient, Any]:
+def get_oauth_client(oauth_client_id: int | UUID = None, oauth_client_slug: str = None) -> tuple[OAuthClient, Any]:
     # Obtain OAuth client definition
     if oauth_client_id:
         oauth_client = OAuthClient.objects.get(id=oauth_client_id)

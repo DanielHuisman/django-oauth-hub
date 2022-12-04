@@ -13,7 +13,6 @@ from django.views.generic import View
 from ..settings import Settings
 from ..util import get_by_key_string
 from .models import OAuthClient, OAuthClientConnection
-from .oauth import get_oauth_client, store_oauth_client_token
 
 
 class OAuthRedirectView(View):
@@ -29,8 +28,11 @@ class OAuthRedirectView(View):
 class OAuthView(View):
 
     def get(self, request: HttpRequest, oauth_client_id: UUID = None, oauth_client_slug: str = None) -> HttpResponse:
+        # Obtain client backend and user model
+        backend = Settings.get_client_backend()
+
         # Find OAuth client
-        oauth_client, client = get_oauth_client(oauth_client_id, oauth_client_slug)
+        oauth_client, client = backend.get_client(oauth_client_id, oauth_client_slug)
 
         # Redirect to OAuth provider
         redirect_uri = request.build_absolute_uri(reverse('oauth_callback', args=(str(oauth_client.id), )))
@@ -46,14 +48,13 @@ class OAuthCallbackView(View):
         User = auth.get_user_model()
 
         # Find OAuth client
-        oauth_client, client = get_oauth_client(oauth_client_id, oauth_client_slug)
+        oauth_client, client = backend.get_client(oauth_client_id, oauth_client_slug)
 
         # Obtain token from OAuth provider
         token = client.authorize_access_token(request)
 
         # Store OAuth client token
-        # TODO: get_oauth_client and store_oauth_client_token should probably be wrapped by backend
-        oauth_client_token = store_oauth_client_token(oauth_client, token)
+        oauth_client_token = backend.store_client_token(oauth_client, token)
 
         # Fetch user info if necessary
         user_info: Optional[dict]

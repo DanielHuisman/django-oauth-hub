@@ -3,7 +3,7 @@ from importlib import import_module
 from typing import Any
 
 
-def get_by_key_string(data: dict, key: str):
+def get_by_key_string(data: dict, key: str) -> Any:
     keys = key.split('.')
     for key in keys:
         data = data.get(key, None)

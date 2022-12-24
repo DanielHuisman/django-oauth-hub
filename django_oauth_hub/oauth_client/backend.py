@@ -295,23 +295,23 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
 
         # Validate email address
         if Settings.CLIENT_USE_EMAIL and user_info['email']:
-            email_users = User.objects.filter(email=user_info['email'])
+            users = User.objects.filter(email=user_info['email'])
 
             if request.user.is_authenticated:
-                email_users.exclude(id=request.user.id)
+                users = users.exclude(id=request.user.id)
 
-            if email_users.count() > 0:
+            if users.count() > 0:
                 raise ValidationError(_('Email address already exists. This OAuth user can only be connected to a user with the same email address.'),
                                       code='email_exists')
 
         # Validate username
         if Settings.CLIENT_USE_USERNAME and user_info['username']:
-            username_users = User.objects.filter(username=user_info['username'])
+            users = User.objects.filter(username=user_info['username'])
 
             if request.user.is_authenticated:
-                username_users.exclude(id=request.user.id)
+                users = users.exclude(id=request.user.id)
 
-            if username_users.count() > 0:
+            if users.count() > 0:
                 raise ValidationError(_('Username already exists. This OAuth user can only be connected to a user with the same username.'),
                                       code='username_exists')
 
@@ -321,11 +321,17 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
     def update_connection(self, connection: OAuthClientConnection, token: OAuthClientToken, user_info: UserInfo, user: AbstractBaseUser):
         # Update email address
         if Settings.CLIENT_USE_EMAIL:
-            connection.email = user_info['email']
+            if Settings.CLIENT_ALLOW_BLANK_EMAIL and not user_info['email']:
+                connection.email = ''
+            else:
+                connection.email = user_info['email']
 
         # Update username
         if Settings.CLIENT_USE_USERNAME:
-            connection.username = user_info['username']
+            if Settings.CLIENT_ALLOW_BLANK_USERNAME and not user_info['username']:
+                connection.username = ''
+            else:
+                connection.username = user_info['username']
 
         # Update data
         connection.data = user_info['data']
@@ -346,6 +352,9 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
             user.username = user_info['username']
 
         return user
+
+    def update_user(self, user: AbstractBaseUser, user_info: UserInfo):
+        user.save()
 
     def disconnect(self, oauth_client: OAuthClient, connection: OAuthClientConnection):
         raise NotImplementedError()

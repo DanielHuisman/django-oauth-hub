@@ -5,7 +5,7 @@ from django.contrib import auth
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 from django.utils.translation import gettext as _
 from django.views.generic import View
 
@@ -20,7 +20,12 @@ class OAuthRedirectView(View):
             raise ValidationError(_('More than one OAuth client available.'), code='too_many_clients')
 
         oauth_client = OAuthClient.objects.first()
-        return redirect('oauth', args=(str(oauth_client.id), ))
+        arg = oauth_client.slug if oauth_client.slug else str(oauth_client.id)
+
+        try:
+            return redirect('oauth', args=(arg, ))
+        except NoReverseMatch:
+            return redirect('/oauth/{}'.format(arg))
 
 
 class OAuthView(View):
@@ -33,7 +38,8 @@ class OAuthView(View):
         oauth_client, client = backend.get_client(oauth_client_id, oauth_client_slug)
 
         # Redirect to OAuth provider
-        redirect_uri = request.build_absolute_uri(reverse('oauth_callback', args=(str(oauth_client.id), )))
+        arg = oauth_client.slug if oauth_client.slug else str(oauth_client.id)
+        redirect_uri = request.build_absolute_uri(reverse('oauth_callback', args=(arg, )))
         return client.authorize_redirect(request, redirect_uri, **oauth_client.parameters)
 
 

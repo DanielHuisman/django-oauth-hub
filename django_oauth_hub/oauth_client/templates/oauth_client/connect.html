@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<p>{% translate 'Do you want to connect third party account "{{  }}" to your account "{{  }}"?' %}</p>
+<p>{% translate 'Do you want to connect third party account "{{ oauth_identifier }}" to your account "{{ identifier }}"?' %}</p>
 
 <form method="post">
     {% csrf_token %}

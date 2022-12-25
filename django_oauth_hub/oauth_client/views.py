@@ -137,6 +137,17 @@ class OAuthConfirmConnectView(LoginRequiredMixin, FormView):
 
         token, user_info = self.get_token_and_user_info()
         context['user_info'] = user_info
+        context['user'] = self.request.user
+
+        if Settings.CLIENT_USE_EMAIL:
+            context['oauth_identifier'] = user_info.get('email')
+            context['identifier'] = self.request.user.email
+        elif Settings.CLIENT_USE_USERNAME:
+            context['oauth_identifier'] = user_info.get('username')
+            context['identifier'] = self.request.user.username
+        else:
+            context['oauth_identifier'] = user_info.get('id')
+            context['identifier'] = self.request.user.id
 
         return context
 

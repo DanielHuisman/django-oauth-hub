@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import NoReverseMatch, reverse
 from django.utils.translation import gettext_lazy as _
 
 from django_oauth_hub.models import BaseModel
@@ -30,11 +31,12 @@ class OAuthClient(BaseModel):
     access_token_url = models.URLField(_('access token URL'), blank=True)
     authorize_url = models.URLField(_('authorize URL'), blank=True)
     scope = models.TextField(_('scope'), blank=True)
-    parameters = models.JSONField(_('parameters'), default=dict)
+    parameters = models.JSONField(_('parameters'), blank=True, default=dict)
     openid_url = models.URLField(_('OpenID Connect Discovery URL'), blank=True)
     user_api_url = models.URLField(_('user API URL'), blank=True)
     user_api_key = models.TextField(_('user API key'), blank=True)
     user_id_key = models.TextField(_('user ID key'))
+    is_choice = models.BooleanField(_('is choice'), default=Settings.get_client_is_choice_default)
 
     if Settings.CLIENT_USE_EMAIL:
         user_email_key = models.TextField(_('user email key'), blank=Settings.CLIENT_ALLOW_BLANK_EMAIL)
@@ -43,6 +45,15 @@ class OAuthClient(BaseModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def oauth_url(self):
+        arg = self.slug if self.slug else str(self.id)
+        try:
+            return reverse('oauth', args=(arg, ))
+        except NoReverseMatch:
+            # When using integer IDs Django can't distinguish between IDs and slugs, so this is a workaround.
+            return reverse('oauth', args=('__slug__', )).replace('__slug__', arg)
 
     def clean(self):
         # Validate mandatory fields
@@ -58,6 +69,10 @@ class OAuthClient(BaseModel):
                 if not self.authorize_url:
                     raise ValidationError(_('Authorize URL cannot be blank when using OAuth 2.0 without OpenID Connect Discovery.'), code='blank')
 
+        # Ensure parameters is always a dictionary
+        if not self.parameters:
+            self.parameters = {}
+
         # Validate user info URL
         if not self.user_api_url and not self.openid_url:
             raise ValidationError(_('User API URL and OpenID Connect Discovery URL cannot both be blank.'), code='blank')
@@ -67,7 +82,7 @@ class OAuthClient(BaseModel):
             self.scope = f'openid,{self.scope}' if self.scope else 'openid'
 
         # Call backend validation hook
-        Settings.get_client_backend().validate_oauth_client(self)
+        Settings.get_client_backend().clean_oauth_client(self)
 
     def save(self, **kwargs):
         self.clean()

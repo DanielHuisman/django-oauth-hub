@@ -5,33 +5,38 @@ from django.contrib import auth
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
-from django.urls import reverse, NoReverseMatch
+from django.urls import reverse
 from django.utils.translation import gettext as _
-from django.views.generic import View
+from django.views.generic import View, ListView
 
 from ..settings import Settings
 from .models import OAuthClient
 
 
+class OAuthChoiceView(ListView):
+
+    model = OAuthClient
+    queryset = OAuthClient.objects.filter(is_choice=True)
+    context_object_name = 'oauth_clients'
+
+
 class OAuthRedirectView(View):
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        if OAuthClient.objects.count() != 1:
+        queryset = OAuthClient.objects.filter(is_choice=True)
+
+        if queryset.count() != 1:
             raise ValidationError(_('More than one OAuth client available.'), code='too_many_clients')
 
-        oauth_client = OAuthClient.objects.first()
-        arg = oauth_client.slug if oauth_client.slug else str(oauth_client.id)
-
-        try:
-            return redirect('oauth', args=(arg, ))
-        except NoReverseMatch:
-            return redirect('/oauth/{}'.format(arg))
+        # Redirect to OAuth view
+        oauth_client = queryset.first()
+        return redirect(oauth_client.oauth_url)
 
 
 class OAuthView(View):
 
     def get(self, request: HttpRequest, oauth_client_id: UUID = None, oauth_client_slug: str = None) -> HttpResponse:
-        # Obtain client backend and user model
+        # Obtain client backend
         backend = Settings.get_client_backend()
 
         # Find OAuth client

@@ -1,6 +1,5 @@
-from abc import abstractmethod, ABC
 from datetime import datetime
-from typing import Any, Optional, TypedDict
+from typing import Any, Optional
 from uuid import UUID
 
 from authlib.integrations.django_client import OAuth
@@ -11,82 +10,11 @@ from django.http import HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from ..settings import Settings
-from ..util import get_by_key_string
-from .models import OAuthClient, OAuthClientToken, OAuthClientConnection
-from .providers import providers as all_providers, OAuthProvider
-
-
-class UserInfo(TypedDict):
-    id: str
-    email: Optional[str]
-    username: Optional[str]
-    data: dict
-
-
-class BaseOAuthClientBackend(ABC):
-
-    @abstractmethod
-    def get_providers(self) -> dict[str, OAuthProvider]:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def get_client(self, oauth_client_id: int | UUID = None, oauth_client_slug: str = None) -> tuple[OAuthClient, Any]:
-        raise NotImplementedError()
-
-    def get_client_by_id(self, oauth_client_id: int | UUID) -> tuple[OAuthClient, Any]:
-        return self.get_client(oauth_client_id=oauth_client_id)
-
-    def get_client_by_slug(self, oauth_client_slug: str) -> tuple[OAuthClient, Any]:
-        return self.get_client(oauth_client_slug=oauth_client_slug)
-
-    @abstractmethod
-    def store_client_token(self, oauth_client: OAuthClient, token: Any) -> OAuthClientToken:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def get_user_info_data(self, oauth_client: OAuthClient, client: Any, token, request: HttpRequest) -> dict:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def get_user_info(self, oauth_client: OAuthClient, data: dict) -> UserInfo:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def connect(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: UserInfo, request: HttpRequest) -> OAuthClientConnection:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def validate_existing_connect(self, oauth_client: OAuthClient, user_info: UserInfo, request: HttpRequest, connection: OAuthClientConnection):
-        raise NotImplementedError()
-
-    @abstractmethod
-    def validate_new_connect(self, oauth_client: OAuthClient, user_info: UserInfo, request: HttpRequest):
-        raise NotImplementedError()
-
-
-    @abstractmethod
-    def create_connection(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: UserInfo, user: AbstractBaseUser) -> OAuthClientConnection:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def update_connection(self, connection: OAuthClientConnection, token: OAuthClientToken, user_info: UserInfo,  user: AbstractBaseUser):
-        raise NotImplementedError()
-
-    @abstractmethod
-    def create_user(self, user_info: UserInfo) -> AbstractBaseUser:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def update_user(self, user: AbstractBaseUser, user_info: UserInfo):
-        raise NotImplementedError()
-
-    @abstractmethod
-    def disconnect(self, oauth_client: OAuthClient, connection: OAuthClientConnection):
-        raise NotImplementedError()
-
-    def validate_oauth_client(self, oauth_client: OAuthClient):
-        pass
+from ...settings import Settings
+from ...util import get_by_key_string
+from ..models import OAuthClient, OAuthClientToken, OAuthClientConnection
+from ..providers import providers as all_providers, OAuthProvider
+from .base import BaseOAuthClientBackend, UserInfo
 
 
 class DefaultOAuthClientBackend(BaseOAuthClientBackend):
@@ -100,6 +28,13 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
             return {slug: provider for slug, provider in all_providers.items() if slug in Settings.CLIENT_PROVIDERS}
 
         return all_providers
+
+    def clean_oauth_client(self, oauth_client: OAuthClient):
+        if Settings.FORCE_HTTPS_URLS:
+            for field in ('request_token_url', 'access_token_url', 'authorize_url', 'openid_url', 'user_api_url'):
+                value = getattr(oauth_client, field)
+                if value and value.startswith('http://'):
+                    raise ValidationError('OAuth client URLs must use HTTPS instead of HTTP.')
 
     def create_oauth_client(self, provider_slug: str, client_id: str = None, client_secret: str = None) -> OAuthClient:
         provider = self.get_providers().get(provider_slug)
@@ -159,7 +94,8 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
 
             # Create OAuth client token if necessary
             if not oauth_client_token:
-                oauth_client_token = OAuthClientToken(client=oauth_client, oauth_token=token.get('oauth_token'), oauth_token_secret=token.get('oauth_token_secret'))
+                oauth_client_token = OAuthClientToken(client=oauth_client, oauth_token=token.get('oauth_token'),
+                                                      oauth_token_secret=token.get('oauth_token_secret'))
                 oauth_client_token.save()
         elif oauth_client.version == OAuthClient.Version.V2_0:
             # Attempt to find existing OAuth client token
@@ -285,12 +221,12 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
 
         return connection
 
-    def validate_existing_connect(self, oauth_client: OAuthClient, user_info: UserInfo, request: HttpRequest, connection: OAuthClientConnection):
+    def validate_existing_connect(self, _oauth_client: OAuthClient, _user_info: UserInfo, request: HttpRequest, connection: OAuthClientConnection):
         # Check if the user is trying to connect another user's OAuth account
         if request.user.is_authenticated and connection.user.id != request.user.id:
             raise ValidationError(_('OAuth user is already connected to another user.'), code='already_connected')
 
-    def validate_new_connect(self, oauth_client: OAuthClient, user_info: UserInfo, request: HttpRequest):
+    def validate_new_connect(self, _oauth_client: OAuthClient, user_info: UserInfo, request: HttpRequest):
         User = auth.get_user_model()
 
         # Validate email address
@@ -357,4 +293,4 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
         user.save()
 
     def disconnect(self, oauth_client: OAuthClient, connection: OAuthClientConnection):
-        raise NotImplementedError()
+        connection.delete()

@@ -70,12 +70,12 @@ These settings can only be changed before the first migration.
 ### After migration
 These settings can be changed at any time.
 
-| Name                | Description                                                                                                                                                    | Type                            | Default Value                                                            |
-|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|--------------------------------------------------------------------------|
-| `backend`           | Backend used for OAuth clients. Override this to customize the default behaviour. See [client backend](client/backend.md) for more information.                | `str`                           | `django_oauth_hub.oauth_client.`<br/>`backend.DefaultOAuthClientBackend` |
-| `providers`         | List of enabled providers. If none are specified, all providers are enabled. See [providers](client/providers.md) for a list of options.                       | `list[str]`                     | `None`                                                                   |
-| `default_view`      | The default view to use for `/oauth`. Use `redirect` to automatically redirect to the only available client. Use `choice` to show a list of available clients. | `Literal['choice', 'redirect']` | `choice`                                                                 |
-| `is_choice_default` | Whether OAuth clients should appear in the choice view by default.                                                                                             | `bool`                          | `False`                                                                  |
+| Name                | Description                                                                                                                                     | Type        | Default Value                                                            |
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|-------------|--------------------------------------------------------------------------|
+| `backend`           | Backend used for OAuth clients. Override this to customize the default behaviour. See [client backend](client/backend.md) for more information. | `str`       | `django_oauth_hub.oauth_client.`<br/>`backend.DefaultOAuthClientBackend` |
+| `providers`         | List of enabled providers. If none are specified, all providers are enabled. See [providers](client/providers.md) for a list of options.        | `list[str]` | `None`                                                                   |
+| `redirect_login`    | Whether the login view automatically redirect when only a single client is available.                                                           | `bool`      | `False`                                                                  |
+| `is_choice_default` | Whether OAuth clients should appear in the choice view by default.                                                                              | `bool`      | `False`                                                                  |
 
 ## Server
 These settings are for the OAuth server module and can be configured under the `server` key:

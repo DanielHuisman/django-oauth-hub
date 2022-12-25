@@ -25,3 +25,7 @@ class OAuthClientModelForm(forms.ModelForm):
             self.data.update(provider)
 
         super().full_clean()
+
+
+class OAuthConfirmConnectForm(forms.Form):
+    choice = forms.ChoiceField(choices=('connect', 'login'))

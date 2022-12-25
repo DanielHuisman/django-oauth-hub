@@ -9,7 +9,7 @@ from ..models import OAuthClient, OAuthClientToken, OAuthClientConnection
 from ..providers import OAuthProvider
 
 
-class UserInfo(TypedDict):
+class OAuthUserInfo(TypedDict):
     id: str
     email: Optional[str]
     username: Optional[str]
@@ -44,31 +44,31 @@ class BaseOAuthClientBackend(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_user_info(self, oauth_client: OAuthClient, data: dict) -> UserInfo:
+    def get_user_info(self, oauth_client: OAuthClient, data: dict) -> OAuthUserInfo:
         raise NotImplementedError()
 
     @abstractmethod
-    def connect(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: UserInfo, request: HttpRequest) -> OAuthClientConnection:
+    def connect(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: OAuthUserInfo, request: HttpRequest):
         raise NotImplementedError()
-
-    def validate_existing_connect(self, oauth_client: OAuthClient, user_info: UserInfo, request: HttpRequest, connection: OAuthClientConnection):
-        pass
-
-    def validate_new_connect(self, oauth_client: OAuthClient, user_info: UserInfo, request: HttpRequest):
-        pass
-
-    def create_connection(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: UserInfo, user: AbstractBaseUser) -> OAuthClientConnection:
-        pass
-
-    def update_connection(self, connection: OAuthClientConnection, token: OAuthClientToken, user_info: UserInfo,  user: AbstractBaseUser):
-        pass
-
-    def create_user(self, user_info: UserInfo) -> AbstractBaseUser:
-        pass
-
-    def update_user(self, user: AbstractBaseUser, user_info: UserInfo):
-        pass
 
     @abstractmethod
     def disconnect(self, oauth_client: OAuthClient, connection: OAuthClientConnection):
         raise NotImplementedError()
+
+    def validate_existing_connect(self, oauth_client: OAuthClient, user_info: OAuthUserInfo, request: HttpRequest, connection: OAuthClientConnection):
+        pass
+
+    def validate_new_connect(self, oauth_client: OAuthClient, user_info: OAuthUserInfo, request: HttpRequest):
+        pass
+
+    def create_connection(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: OAuthUserInfo, user: AbstractBaseUser) -> OAuthClientConnection:
+        pass
+
+    def update_connection(self, connection: OAuthClientConnection, token: OAuthClientToken, user_info: OAuthUserInfo,  user: AbstractBaseUser):
+        pass
+
+    def create_user(self, user_info: OAuthUserInfo) -> AbstractBaseUser:
+        pass
+
+    def update_user(self, user: AbstractBaseUser, user_info: OAuthUserInfo):
+        pass

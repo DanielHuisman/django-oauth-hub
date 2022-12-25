@@ -1,0 +1,23 @@
+{% load i18n %}
+
+{% if is_connect %}
+<h1>{% translate 'Connect' %}</h1>
+<p>{% translate 'Connect a third party account to your account:' %}</p>
+{% else %}
+<h1>{% translate 'Sign in' %}</h1>
+<p>{% translate 'Sign in with a third party account:' %}</p>
+{% endif %}
+
+{% if clients %}
+    <ul>
+        {% for client in clients %}
+            <li>
+                <a href="{{ client.oauth_url }}">
+                    {% blocktranslate with name=client.name %}Sign in with {{ name }}{% endblocktranslate %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>{% translate 'No third party account providers available.' %}</p>
+{% endif %}

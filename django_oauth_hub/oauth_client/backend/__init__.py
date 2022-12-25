@@ -1,2 +1,2 @@
-from .base import BaseOAuthClientBackend, UserInfo
+from .base import BaseOAuthClientBackend, OAuthUserInfo
 from .default import DefaultOAuthClientBackend

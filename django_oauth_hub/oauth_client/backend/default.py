@@ -14,7 +14,7 @@ from ...settings import Settings
 from ...util import get_by_key_string
 from ..models import OAuthClient, OAuthClientToken, OAuthClientConnection
 from ..providers import providers as all_providers, OAuthProvider
-from .base import BaseOAuthClientBackend, UserInfo
+from .base import BaseOAuthClientBackend, OAuthUserInfo
 
 
 class DefaultOAuthClientBackend(BaseOAuthClientBackend):
@@ -143,7 +143,7 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
         else:
             raise ImproperlyConfigured(_('OAuth client needs either a User API URL or an OpenID Connect Discovery URL.'))
 
-    def get_user_info(self, oauth_client: OAuthClient, data: dict) -> UserInfo:
+    def get_user_info(self, oauth_client: OAuthClient, data: dict) -> OAuthUserInfo:
         # TODO: possibly add support for arbitrary mappings
         return {
             'id': self.get_user_info_id(oauth_client, data),
@@ -187,7 +187,7 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
 
         return username
 
-    def connect(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: UserInfo, request: HttpRequest) -> OAuthClientConnection:
+    def connect(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: OAuthUserInfo, request: HttpRequest) -> OAuthClientConnection:
         connection: OAuthClientConnection
         user: AbstractBaseUser
 
@@ -221,12 +221,12 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
 
         return connection
 
-    def validate_existing_connect(self, _oauth_client: OAuthClient, _user_info: UserInfo, request: HttpRequest, connection: OAuthClientConnection):
+    def validate_existing_connect(self, _oauth_client: OAuthClient, _user_info: OAuthUserInfo, request: HttpRequest, connection: OAuthClientConnection):
         # Check if the user is trying to connect another user's OAuth account
         if request.user.is_authenticated and connection.user.id != request.user.id:
             raise ValidationError(_('OAuth user is already connected to another user.'), code='already_connected')
 
-    def validate_new_connect(self, _oauth_client: OAuthClient, user_info: UserInfo, request: HttpRequest):
+    def validate_new_connect(self, _oauth_client: OAuthClient, user_info: OAuthUserInfo, request: HttpRequest):
         User = auth.get_user_model()
 
         # Validate email address
@@ -251,10 +251,10 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
                 raise ValidationError(_('Username already exists. This OAuth user can only be connected to a user with the same username.'),
                                       code='username_exists')
 
-    def create_connection(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: UserInfo, user: AbstractBaseUser):
+    def create_connection(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: OAuthUserInfo, user: AbstractBaseUser):
         return OAuthClientConnection(client=oauth_client, identifier=user_info['id'], user=user)
 
-    def update_connection(self, connection: OAuthClientConnection, token: OAuthClientToken, user_info: UserInfo, user: AbstractBaseUser):
+    def update_connection(self, connection: OAuthClientConnection, token: OAuthClientToken, user_info: OAuthUserInfo, user: AbstractBaseUser):
         # Update email address
         if Settings.CLIENT_USE_EMAIL:
             if Settings.CLIENT_ALLOW_BLANK_EMAIL and not user_info['email']:
@@ -277,7 +277,7 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
         token.connection = connection
         token.save()
 
-    def create_user(self, user_info: UserInfo) -> AbstractBaseUser:
+    def create_user(self, user_info: OAuthUserInfo) -> AbstractBaseUser:
         User = auth.get_user_model()
         user = User()
 
@@ -289,7 +289,7 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
 
         return user
 
-    def update_user(self, user: AbstractBaseUser, user_info: UserInfo):
+    def update_user(self, user: AbstractBaseUser, user_info: OAuthUserInfo):
         user.save()
 
     def disconnect(self, oauth_client: OAuthClient, connection: OAuthClientConnection):

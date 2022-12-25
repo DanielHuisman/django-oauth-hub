@@ -23,8 +23,7 @@ class Settings:
     CLIENT_ALLOW_BLANK_USERNAME = _client_settings.get('allow_blank_username', False)
     CLIENT_MAX_LENGTH_USERNAME = int(_client_settings.get('max_length_username', 150))
     CLIENT_PROVIDERS = _client_settings.get('providers')
-    CLIENT_DEFAULT_VIEW: Literal['choice', 'redirect']
-    CLIENT_DEFAULT_VIEW = _client_settings.get('default_view', 'choice')
+    CLIENT_REDIRECT_LOGIN = _client_settings.get('redirect_login', False)
     CLIENT_IS_CHOICE_DEFAULT = _client_settings.get('is_choice_default', False)
 
     _server_settings = _settings.get('server', {})

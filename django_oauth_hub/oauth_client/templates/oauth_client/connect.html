@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<p>{% translate 'Do you want to connect third party account "{{  }}" to your account "{{  }}"?' %}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="choice" value="connect">{% translate 'Yes, connect to current account' %}</button>
+    <button type="submit" name="choice" value="login">{% translate 'No, sign in as separate account' %}</button>
+</form>

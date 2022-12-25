@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from django_oauth_hub.models import BaseModel
@@ -28,3 +29,7 @@ class OAuthClientConnection(BaseModel):
 
     def __str__(self):
         return self.identifier
+
+    @property
+    def disconnect_url(self):
+        return reverse('oauth_disconnect', args=(str(self.id), ))

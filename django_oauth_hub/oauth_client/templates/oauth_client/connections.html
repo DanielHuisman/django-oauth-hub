@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<h1>{% translate 'Connections' %}</h1>
+
+<table>
+    <thead>
+        <tr>
+            {% if Settings.CLIENT_USE_EMAIL %}
+                <th>{% translate 'Email Address' %}</th>
+            {% endif %}
+            {% if Settings.CLIENT_USE_USERNAME %}
+                <th>{% translate 'Username' %}</th>
+            {% endif %}
+            {% if not Settings.CLIENT_USE_EMAIL and not Settings.CLIENT_USE_USERNAME %}
+                <th>{% translate 'Identifier' %}</th>
+            {% endif %}
+            <th>{% translate 'Actions' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for connection in connections %}
+            <tr>
+                {% if Settings.CLIENT_USE_EMAIL %}
+                    <td>{{ connection.email }}</td>
+                {% endif %}
+                {% if Settings.CLIENT_USE_USERNAME %}
+                    <td>{{ connection.username }}</td>
+                {% endif %}
+                {% if not Settings.CLIENT_USE_EMAIL and not Settings.CLIENT_USE_USERNAME %}
+                    <td>{{ connection.identifier }}</td>
+                {% endif %}
+                <td>
+                    <a href="{{ connection.disconnect_url }}">Disconnect</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

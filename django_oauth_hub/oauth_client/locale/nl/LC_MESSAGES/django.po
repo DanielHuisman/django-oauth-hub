@@ -1,0 +1,343 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-28 17:28+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: django_oauth_hub/oauth_client/admin.py:32
+msgid "From provider template"
+msgstr "Van aanbiedersjabloon"
+
+#: django_oauth_hub/oauth_client/admin.py:33
+msgid "From manual configuration"
+msgstr "Van handmatige configuratie"
+
+#: django_oauth_hub/oauth_client/admin.py:34
+msgid "Credentials"
+msgstr "Gegevens"
+
+#: django_oauth_hub/oauth_client/apps.py:8
+#: django_oauth_hub/oauth_client/models/oauth_client.py:13
+msgid "OAuth client"
+msgstr "OAuth cliënt"
+
+#: django_oauth_hub/oauth_client/backend/default.py:45
+#, python-format
+msgid "OAuth provider \"%(slug)s\" was not found."
+msgstr "OAuth aanbieder \"%(slug)s\" is niet gevonden."
+
+#: django_oauth_hub/oauth_client/backend/default.py:147
+msgid ""
+"OAuth client needs either a User API URL or an OpenID Connect Discovery URL."
+msgstr "OAuth cliënt heeft een Gebruiker API URL of een OpenID Connect Discovery URL nodig."
+
+#: django_oauth_hub/oauth_client/backend/default.py:161
+msgid "OAuth client was unable to obtain an ID from user info."
+msgstr "OAuth cliënt kon geen ID verkrijgen uit de gebruikersinformatie."
+
+#: django_oauth_hub/oauth_client/backend/default.py:175
+msgid "OAuth client was unable to obtain an email address from user info."
+msgstr "OAuth cliënt kon geen e-mailadres verkrijgen uit de gebruikersinformatie."
+
+#: django_oauth_hub/oauth_client/backend/default.py:189
+msgid "OAuth client was unable to obtain a username from user info."
+msgstr "OAuth cliënt kon geen gebruikersnaam verkrijgen uit de gebruikersinformatie"
+
+#: django_oauth_hub/oauth_client/backend/default.py:230
+msgid "OAuth user is already connected to another user."
+msgstr "OAuth gebruiker is al verbonden aan een andere gebruiker."
+
+#: django_oauth_hub/oauth_client/backend/default.py:243
+msgid ""
+"Email address already exists. This OAuth user can only be connected to a "
+"user with the same email address."
+msgstr ""
+
+#: django_oauth_hub/oauth_client/backend/default.py:254
+msgid ""
+"Username already exists. This OAuth user can only be connected to a user "
+"with the same username."
+msgstr ""
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:14
+msgid "OAuth clients"
+msgstr "OAuth cliënten"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:17
+msgid "1.0"
+msgstr "1.0"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:18
+msgid "2.0"
+msgstr "2.0"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:22
+msgid "Generic"
+msgstr "Generiek"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:24
+msgid "version"
+msgstr "versie"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:25
+msgid "type"
+msgstr "type"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:26
+msgid "name"
+msgstr "naam"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:27
+msgid "slug"
+msgstr "slug"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:28
+msgid "client ID"
+msgstr "cliënt ID"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:29
+msgid "client secret"
+msgstr "cliënt geheim"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:30
+msgid "request token URL"
+msgstr "tokenaanvraag URL"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:31
+msgid "access token URL"
+msgstr "toegangstoken URL"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:32
+msgid "authorize URL"
+msgstr "autorisatie URL"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:33
+msgid "scope"
+msgstr "scope"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:34
+msgid "parameters"
+msgstr "parameters"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:35
+msgid "OpenID Connect Discovery URL"
+msgstr "OpenID Connect Discovery URL"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:36
+msgid "user API URL"
+msgstr "gebruiker API URL"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:37
+msgid "user API key"
+msgstr "gebruiker API sleutel"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:38
+msgid "user ID key"
+msgstr "gebruiker ID sleutel"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:39
+msgid "is choice"
+msgstr "is keuze"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:42
+msgid "user email key"
+msgstr "gebruiker e-mail sleutel"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:44
+msgid "user username key"
+msgstr "gebruiker gebruikersnaam sleutel"
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:62
+msgid "OpenID Connect Discovery cannot be used for OAuth 1.0."
+msgstr "OpenID Connect Discovery kan niet gebruikt worden voor OAuth 1.0."
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:64
+msgid "Request token URL cannot be blank when using OAuth 1.0."
+msgstr "Tokenaanvraag URL kan niet gebruikt worden voor OAuth 1.0."
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:68
+msgid ""
+"Access token URL cannot be blank when using OAuth 2.0 without OpenID Connect "
+"Discovery."
+msgstr "Toegangstoken URL kan niet leeg zijn als OAuth 2.0 wordt gebruikt zonder OpenID Connect Discovery."
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:70
+msgid ""
+"Authorize URL cannot be blank when using OAuth 2.0 without OpenID Connect "
+"Discovery."
+msgstr "Autorisatie URL kan niet leeg zijn als OAuth 2.0 wordt gebruikt zonder OpenID Connect Discovery."
+
+#: django_oauth_hub/oauth_client/models/oauth_client.py:78
+msgid "User API URL and OpenID Connect Discovery URL cannot both be blank."
+msgstr "Gebruiker API URL en OpenID Connect Discovery URL kunnen niet beiden leeg zijn."
+
+#: django_oauth_hub/oauth_client/models/oauth_client_connection.py:15
+msgid "OAuth client connection"
+msgstr "OAuth cliënt verbinding"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_connection.py:16
+msgid "OAuth client connections"
+msgstr "OAuth cliënt verbindingen"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_connection.py:19
+msgid "identifier"
+msgstr "identificatie"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_connection.py:20
+msgid "data"
+msgstr "data"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_connection.py:23
+msgid "email address"
+msgstr "e-mailadres"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_connection.py:25
+msgid "username"
+msgstr "gebruikersnaam"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_connection.py:27
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:25
+msgid "client"
+msgstr "cliënt"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_connection.py:28
+msgid "user"
+msgstr "gebruiker"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:15
+msgid "OAuth client token"
+msgstr "OAuth cliënt token"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:16
+msgid "OAuth client tokens"
+msgstr "OAuth cliënt tokens"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:18
+msgid "OAuth token"
+msgstr "OAuth token"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:19
+msgid "OAuth token secret"
+msgstr "OAuth token geheim"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:20
+msgid "token type"
+msgstr "token type"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:21
+msgid "access token"
+msgstr "toegangstoken"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:22
+msgid "refresh token"
+msgstr "ververstoken"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:23
+msgid "expires at"
+msgstr "verloopt om"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:26
+msgid "connection"
+msgstr "verbinding"
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:40
+msgid "OAuth token cannot be blank when using OAuth 1.0"
+msgstr "OAuth token kan niet leeg zijn als OAuth 1.0 wordt gebruikt."
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:42
+msgid "OAuth token secret cannot be blank when using OAuth 1.0"
+msgstr "OAuth token geheim kan niet leeg zijn als OAuth 1.0 wordt gebruikt."
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:45
+msgid "Token type cannot be blank when using OAuth 2.0"
+msgstr "Token type kan niet leeg zijn als OAuth 2.0 wordt gebruikt."
+
+#: django_oauth_hub/oauth_client/models/oauth_client_token.py:47
+msgid "Access token cannot be blank when using OAuth 2.0"
+msgstr "Toegangstoken kan niet leeg zijn als OAuth 2.0 wordt gebruikt."
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/connect.html:3
+msgid ""
+"Do you want to connect third party account \"{{ oauth_identifier }}\" to "
+"your account \"{{ identifier }}\"?"
+msgstr ""
+"Wil je het account van een derde partij \"{{ oauth_identifier }}\" aan "
+"je account \"{{ identifier }}\" verbinden?"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/connect.html:7
+msgid "Yes, connect to current account"
+msgstr "Ja, verbind aan huidige account"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/connect.html:8
+msgid "No, sign in as separate account"
+msgstr "Nee, log in als apart account"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/connections.html:3
+msgid "Connections"
+msgstr "Verbindingen"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/connections.html:9
+msgid "Email Address"
+msgstr "E-mailadres"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/connections.html:12
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/connections.html:15
+msgid "Identifier"
+msgstr "Identificatie"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/connections.html:17
+msgid "Actions"
+msgstr "Acties"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/disconnect.html:3
+msgid "Disconnect"
+msgstr "Ontbinden"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/login.html:4
+msgid "Connect"
+msgstr "Verbinden"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/login.html:5
+msgid "Connect a third party account to your account:"
+msgstr "Verbind een account van een derde partij aan je account:"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/login.html:7
+msgid "Sign in"
+msgstr "Inloggen"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/login.html:8
+msgid "Sign in with a third party account:"
+msgstr "Inloggen met een account van een derde partij:"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/login.html:16
+#, python-format
+msgid "Sign in with %(name)s"
+msgstr "Inloggen met %(name)s"
+
+#: django_oauth_hub/oauth_client/templates/oauth_client/login.html:22
+msgid "No third party account providers available."
+msgstr "Geen aanbieders voor derde partij accounts beschikbaar."
+
+#: django_oauth_hub/oauth_client/views.py:91
+msgid "OAuth client was unable to obtain user info."
+msgstr "OAuth cliënt kon geen gebruikersinformatie verkrijgen."
+
+#: django_oauth_hub/oauth_client/views.py:96
+msgid "OAuth client was unable to process user info."
+msgstr "OAuth cliënt kon de gebruikersinformatie niet verwerken."

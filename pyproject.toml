@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-oauth-hub"
-version = "0.0.4"
+version = "0.0.5"
 description = "OAuth client and server for Django using authlib."
 authors = ["Daniel Huisman <daniel@huisman.me>"]
 maintainers = ["Daniel Huisman <daniel@huisman.me>"]

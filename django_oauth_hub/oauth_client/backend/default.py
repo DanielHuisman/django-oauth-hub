@@ -6,6 +6,7 @@ from authlib.integrations.django_client import OAuth
 from django.contrib import auth
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import ValidationError, ImproperlyConfigured
+from django.db import transaction
 from django.http import HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -15,6 +16,8 @@ from ...util import get_by_key_string
 from ..models import OAuthClient, OAuthClientToken, OAuthClientConnection
 from ..providers import providers as all_providers, OAuthProvider
 from .base import BaseOAuthClientBackend, OAuthUserInfo
+
+# TODO: check if more transaction.atomic blocks are needed
 
 
 class DefaultOAuthClientBackend(BaseOAuthClientBackend):
@@ -293,4 +296,9 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
         user.save()
 
     def disconnect(self, oauth_client: OAuthClient, connection: OAuthClientConnection):
-        connection.delete()
+        with transaction.atomic():
+            # Delete tokens related to the connection
+            connection.tokens.all().delete()
+
+            # Delete the connection
+            connection.delete()

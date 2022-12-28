@@ -2,7 +2,6 @@ from abc import abstractmethod, ABC
 from typing import Any, Optional, TypedDict
 from uuid import UUID
 
-from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import HttpRequest
 
 from ..models import OAuthClient, OAuthClientToken, OAuthClientConnection
@@ -54,21 +53,3 @@ class BaseOAuthClientBackend(ABC):
     @abstractmethod
     def disconnect(self, oauth_client: OAuthClient, connection: OAuthClientConnection):
         raise NotImplementedError()
-
-    def validate_existing_connect(self, oauth_client: OAuthClient, user_info: OAuthUserInfo, request: HttpRequest, connection: OAuthClientConnection):
-        pass
-
-    def validate_new_connect(self, oauth_client: OAuthClient, user_info: OAuthUserInfo, request: HttpRequest):
-        pass
-
-    def create_connection(self, oauth_client: OAuthClient, token: OAuthClientToken, user_info: OAuthUserInfo, user: AbstractBaseUser) -> OAuthClientConnection:
-        pass
-
-    def update_connection(self, connection: OAuthClientConnection, token: OAuthClientToken, user_info: OAuthUserInfo,  user: AbstractBaseUser):
-        pass
-
-    def create_user(self, user_info: OAuthUserInfo) -> AbstractBaseUser:
-        pass
-
-    def update_user(self, user: AbstractBaseUser, user_info: OAuthUserInfo):
-        pass

@@ -7,6 +7,7 @@ from django.contrib import auth
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.db import transaction
+from django.db.models import Q
 from django.http import HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -117,7 +118,7 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
 
             expires_at = token.get('expires_at')
             if type(expires_at) == int:
-                expires_at = timezone.make_aware(datetime.fromtimestamp(expires_at))
+                expires_at = timezone.make_aware(datetime.utcfromtimestamp(expires_at))
             oauth_client_token.expires_at = expires_at
 
             oauth_client_token.save()
@@ -276,9 +277,26 @@ class DefaultOAuthClientBackend(BaseOAuthClientBackend):
         connection.data = user_info['data']
         connection.save()
 
-        # Update OAuth client token
-        token.connection = connection
-        token.save()
+        with transaction.atomic():
+            if connection.client.version == OAuthClient.Version.V2_0:
+                # Check if a refresh token exists for this connection
+                token_with_refresh = connection.tokens.exclude(Q(refresh_token__isnull=True) | Q(refresh_token__exact='')).order_by('-created_at').first()
+                if token_with_refresh:
+                    # Update previous OAuth client token
+                    token_with_refresh.token_type = token.token_type
+                    token_with_refresh.access_token = token.access_token
+                    token_with_refresh.expires_at = token.expires_at
+                    token_with_refresh.save()
+
+                    token.delete()
+                    token = token_with_refresh
+
+                # Delete other previous non-refresh tokens
+                connection.tokens.filter(Q(refresh_token__isnull=True) | Q(refresh_token__exact='')).exclude(id=token.id).delete()
+
+            # Update OAuth client token
+            token.connection = connection
+            token.save()
 
     def create_user(self, user_info: OAuthUserInfo) -> AbstractBaseUser:
         User = auth.get_user_model()

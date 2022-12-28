@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib.admin import register, ModelAdmin
 from django.utils.translation import gettext_lazy as _
 
@@ -44,6 +43,14 @@ class OAuthClientConnectionAdmin(ModelAdmin):
 
 @register(OAuthClientToken)
 class OAuthClientTokenAdmin(ModelAdmin):
-    list_display = ('id', 'client', 'connection', 'expires_at')
+    list_display = ('id', 'client', 'connection', 'version', 'expires_at', 'has_refresh_token')
     list_filter = ('client', 'expires_at')
     ordering = ('id', )
+
+    def version(self, token: OAuthClientToken):
+        return token.client.get_version_display()
+
+    def has_refresh_token(self, token: OAuthClientToken):
+        return not not token.refresh_token
+
+    has_refresh_token.boolean = True

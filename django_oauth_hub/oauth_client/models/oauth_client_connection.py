@@ -28,6 +28,10 @@ class OAuthClientConnection(BaseModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('user'), related_name='connections', on_delete=models.CASCADE)
 
     def __str__(self):
+        if Settings.CLIENT_USE_EMAIL and self.email:
+            return self.email
+        if Settings.CLIENT_USE_USERNAME and self.username:
+            return self.username
         return self.identifier
 
     @property

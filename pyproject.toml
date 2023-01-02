@@ -6,13 +6,13 @@ build-backend = "poetry.core.masonry.api"
 name = "django-oauth-hub"
 version = "0.0.5"
 description = "OAuth client and server for Django using authlib."
-authors = ["Daniel Huisman <daniel@huisman.me>"]
-maintainers = ["Daniel Huisman <daniel@huisman.me>"]
+authors = ["Nixy <info@nixy.software>"]
+maintainers = ["Nixy <info@nixy.software>"]
 license = "MIT"
 readme = "README.md"
 
-homepage = "https://github.com/DanielHuisman/django-oauth-hub"
-repository = "https://github.com/DanielHuisman/django-oauth-hub"
+homepage = "https://github.com/NixyOrg/django-oauth-hub"
+repository = "https://github.com/NixyOrg/django-oauth-hub"
 
 keywords = ["django", "oauth", "client", "server", "authlib"]
 
